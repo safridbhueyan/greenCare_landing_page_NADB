@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Sprout, Menu, X, ChevronRight, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronRight, Sparkles, Download } from 'lucide-react';
 
 interface NavbarProps {
   onOpenSubscription: () => void;
+  onOpenDownload?: () => void;
   /** True when the user has an active BDApps subscription */
   isSubscribed?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, onOpenDownload, isSubscribed }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -32,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
           {/* Logo */}
           <a href="#" className="flex items-center gap-2.5 group">
             <img
-              src="/logo.png"
+              src="./logo.png"
               alt="GreenCare Logo"
               className="w-10 h-10 rounded-xl object-contain transition-transform duration-300 group-hover:scale-105 shadow-xs"
             />
@@ -71,6 +72,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-3">
+            {onOpenDownload && (
+              <button
+                id="navbar-download-app-btn"
+                onClick={onOpenDownload}
+                className="px-4 py-2.5 rounded-full text-sm font-semibold bg-[#2D6A4F]/10 text-[#2D6A4F] hover:bg-[#2D6A4F]/20 border border-[#2D6A4F]/20 transition-all flex items-center gap-2"
+              >
+                <Download className="w-4 h-4 text-[#2D6A4F]" />
+                Download App
+              </button>
+            )}
             {isSubscribed ? (
               <button
                 id="navbar-manage-sub-btn"

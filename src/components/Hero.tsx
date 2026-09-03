@@ -3,9 +3,10 @@ import { ArrowRight, ShieldCheck, Sparkles, HeartPulse, Bot, Users, ScanLine } f
 
 interface HeroProps {
   onOpenSubscription: () => void;
+  onOpenDownload?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenSubscription }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenSubscription, onOpenDownload }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Pollen/floating particles effect canvas
@@ -115,7 +116,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSubscription }) => {
             {/* CTAs */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <button
-                onClick={onOpenSubscription}
+                onClick={onOpenDownload || onOpenSubscription}
                 className="px-8 py-4 rounded-full bg-[#132E1E] text-[#FAF8F5] font-semibold text-base hover:bg-[#2D6A4F] transition-all duration-300 flex items-center justify-center gap-3 shadow-md hover:shadow-xl hover:-translate-y-0.5 group"
               >
                 <span>Get GreenCare</span>

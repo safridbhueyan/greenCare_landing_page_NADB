@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sprout, Globe, Share2, MessageSquare, ArrowRight } from 'lucide-react';
+import { Globe, Share2, MessageSquare, ArrowRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-4 space-y-4">
             <a href="#" className="flex items-center gap-2.5">
               <img
-                src="/logo.png"
+                src="./logo.png"
                 alt="GreenCare Logo"
                 className="w-10 h-10 rounded-xl object-contain shadow-xs"
               />
@@ -88,7 +88,17 @@ export const Footer: React.FC = () => {
 
         {/* Footer Tagline */}
         <div className="pt-8 border-t border-[#132E1E]/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#132E1E]/60 gap-4">
-          <p>© {new Date().getFullYear()} GreenCare Inc. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} GreenCare Inc. All rights reserved. Powered by{' '}
+            <a
+              href="https://safrid.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#2D6A4F] font-bold hover:underline transition-colors"
+            >
+              safrid.com
+            </a>
+          </p>
           <div className="font-serif-editorial italic text-base text-[#2D6A4F]">
             Grow. Care. Connect. 🌱
           </div>

@@ -12,6 +12,7 @@ import { PremiumSection } from './components/PremiumSection';
 import { SubscriptionSection, loadSubscription } from './components/SubscriptionSection';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
+import { DownloadModal } from './components/DownloadModal';
 import { checkSubscription, isSuccess } from './services/bdapps.service';
 import type { SubscriptionState } from './types';
 
@@ -25,6 +26,8 @@ function scrollToSubscription() {
 export function App() {
   // Seed state from localStorage immediately (no flash)
   const [subscription, setSubscription] = useState<SubscriptionState>(loadSubscription);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [pendingDownload, setPendingDownload] = useState(false);
 
   /**
    * On mount: if we have a stored mobile, call the real BDApps API to confirm
@@ -53,37 +56,71 @@ export function App() {
 
   const handleSubscriptionChange = (state: SubscriptionState) => {
     setSubscription(state);
+    if (state.isSubscribed) {
+      setPendingDownload(false);
+    }
+  };
+
+  const handleOpenDownloadModal = () => {
+    setIsDownloadModalOpen(true);
+  };
+
+  const handleSubscribeFromDownloadModal = () => {
+    setIsDownloadModalOpen(false);
+    setPendingDownload(true);
+    scrollToSubscription();
   };
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#132E1E] flex flex-col font-sans selection:bg-[#A3B18A]/30 selection:text-[#132E1E]">
 
-      {/* Sticky Header Navbar — all Subscribe buttons scroll to inline section */}
+      {/* Sticky Header Navbar */}
       <Navbar
         onOpenSubscription={scrollToSubscription}
+        onOpenDownload={handleOpenDownloadModal}
         isSubscribed={subscription.isSubscribed}
       />
 
       {/* Main Digital Garden Page Structure */}
       <main className="flex-1">
-        <Hero onOpenSubscription={scrollToSubscription} />
+        <Hero
+          onOpenSubscription={scrollToSubscription}
+          onOpenDownload={handleOpenDownloadModal}
+        />
         <HowItWorks />
         <AIAssistant onOpenSubscription={scrollToSubscription} />
         <PlantDoctors onOpenSubscription={scrollToSubscription} />
         <PlantLibrary onOpenSubscription={scrollToSubscription} />
         <PlantCommunity onOpenSubscription={scrollToSubscription} />
         <WhyGreenCare />
-        <AppSection onOpenSubscription={scrollToSubscription} />
+        <AppSection
+          onOpenSubscription={scrollToSubscription}
+          onOpenDownload={handleOpenDownloadModal}
+        />
         <PremiumSection onOpenSubscription={scrollToSubscription} />
 
-        {/* Inline subscription section — full OTP flow, no modal */}
-        <SubscriptionSection onSubscriptionChange={handleSubscriptionChange} />
+        {/* Inline subscription section — full OTP flow */}
+        <SubscriptionSection
+          onSubscriptionChange={handleSubscriptionChange}
+          pendingDownload={pendingDownload}
+        />
 
-        <FinalCTA onOpenSubscription={scrollToSubscription} />
+        <FinalCTA
+          onOpenSubscription={scrollToSubscription}
+          onOpenDownload={handleOpenDownloadModal}
+        />
       </main>
 
       {/* Minimal Footer */}
       <Footer />
+
+      {/* Download Alert & Subscription Modal */}
+      <DownloadModal
+        isOpen={isDownloadModalOpen}
+        onClose={() => setIsDownloadModalOpen(false)}
+        onSubscribeClick={handleSubscribeFromDownloadModal}
+        isSubscribed={subscription.isSubscribed}
+      />
 
     </div>
   );

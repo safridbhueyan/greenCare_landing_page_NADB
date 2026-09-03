@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  ScanLine, Leaf, Tractor, Home, TreePine, ShieldCheck,
-  Zap, Users, BookOpen, FlaskConical, Sprout, Globe,
+  ScanLine, Tractor, Home, TreePine, ShieldCheck,
+  Zap, FlaskConical, Sprout, Globe,
 } from 'lucide-react';
 
 const reasons = [

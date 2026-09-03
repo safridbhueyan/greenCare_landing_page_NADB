@@ -3,22 +3,29 @@
  * Handles Subscription, OTP, and Unsubscribe flows for GreenCare.
  *
  * All endpoints expect application/x-www-form-urlencoded POST bodies.
- * Requests are proxied through /bdapps to avoid CORS issues.
+ * Requests are proxied through /bdapps in dev, and relative/absolute in prod.
  *
  * Eligible operators: Robi, cirkle (Bangladesh)
  * Application ID: APP_139202
  */
 
-const BASE = '/bdapps';
+/** Direct API URL for APK download */
+export const APP_DOWNLOAD_URL = 'https://www.bdappsdigitalapps.com/NADB26115/greencare/download.php';
 
-/** Normalize any BD mobile format → 13-digit international: 8801XXXXXXXXX
- *
- *  Accepted inputs (Robi 018 / cirkle 016):
- *    01812345678          → 8801812345678   (local 11-digit)
- *    +8801812345678       → 8801812345678   (full international with +)
- *    8801812345678        → 8801812345678   (already normalized)
- *    1812345678           → 8801812345678   (no trunk 0)
+/**
+ * Triggers the download of the GreenCare mobile app from the BDApps server.
  */
+export function triggerAppDownload(): void {
+  const link = document.createElement('a');
+  link.href = APP_DOWNLOAD_URL;
+  link.setAttribute('download', 'GreenCare.apk');
+  link.target = '_blank';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/** Normalize any BD mobile format → 13-digit international: 8801XXXXXXXXX */
 export function normalizeMobile(raw: string): string {
   const digits = raw.replace(/\D/g, ''); // strip +, spaces, dashes, etc.
 
@@ -31,9 +38,23 @@ export function normalizeMobile(raw: string): string {
   // 10-digit without trunk 0: 1XXXXXXXXX → 8801XXXXXXXXX
   if (digits.startsWith('1') && digits.length === 10) return '880' + digits;
 
-  // Fallback: prepend 880 if not already present so API never gets a bare number
+  // Fallback: prepend 880 if not already present
   return digits.startsWith('880') ? digits : '880' + digits;
 }
+
+/**
+ * API Base URL resolution:
+ * - In Vite Dev mode (localhost): Uses '/bdapps' to leverage Vite proxy server.
+ * - In Production (cPanel deployment): Uses '.' (relative path, e.g. './check_subscription.php')
+ *   so requests resolve to the PHP files in the current cPanel directory without 404 errors.
+ */
+const getEndpoint = (path: string): string => {
+  if (import.meta.env.DEV) {
+    return `/bdapps${path}`;
+  }
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `.${cleanPath}`;
+};
 
 /** Encode a plain object as application/x-www-form-urlencoded */
 function encode(params: Record<string, string>): string {
@@ -43,33 +64,55 @@ function encode(params: Record<string, string>): string {
 }
 
 async function post<T>(path: string, params: Record<string, string>): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: encode(params),
-  });
+  const endpoint = getEndpoint(path);
 
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-  }
-
-  const text = await res.text();
   try {
-    return JSON.parse(text) as T;
-  } catch {
-    // Some PHP endpoints may return plain-text on error
-    throw new Error(text || 'Unknown server error');
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode(params),
+    });
+
+    if (res.ok) {
+      const text = await res.text();
+      try {
+        return JSON.parse(text) as T;
+      } catch {
+        throw new Error(text || 'Unknown server error');
+      }
+    }
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  } catch (err) {
+    // If relative endpoint fetch failed in production (e.g. 404 or network error),
+    // try fallback to absolute BDApps server URL directly
+    if (!import.meta.env.DEV && !endpoint.startsWith('http')) {
+      const fallbackUrl = `https://www.bdappsdigitalapps.com/NADB26115/greencare${path.startsWith('/') ? path : '/' + path}`;
+      const res = await fetch(fallbackUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode(params),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      const text = await res.text();
+      try {
+        return JSON.parse(text) as T;
+      } catch {
+        throw new Error(text || 'Unknown server error');
+      }
+    }
+    throw err;
   }
 }
 
 // ─── Response Types ────────────────────────────────────────────────────────
 
 export interface SendOtpResponse {
-  /** BDApps reference token — must be stored and passed to verifyOtp */
   referenceNo?: string;
   statusCode?: string;
   message?: string;
-  /** Some endpoints return status instead of statusCode */
   status?: string;
 }
 
@@ -80,7 +123,6 @@ export interface VerifyOtpResponse {
 }
 
 export interface CheckSubscriptionResponse {
-  /** 'REGISTERED' means active subscriber */
   status?: string;
   statusCode?: string;
   message?: string;
@@ -94,21 +136,12 @@ export interface UnsubscribeResponse {
 
 // ─── API Methods ──────────────────────────────────────────────────────────
 
-/**
- * Step 1: Send OTP to user's mobile.
- * Returns a referenceNo that must be stored for Step 2.
- */
 export async function sendOtp(mobile: string): Promise<SendOtpResponse> {
   return post<SendOtpResponse>('/send_otp.php', {
     user_mobile: normalizeMobile(mobile),
   });
 }
 
-/**
- * Step 2: Verify the OTP and complete subscription.
- * @param otp      6-digit code received via SMS
- * @param referenceNo  token returned from sendOtp()
- */
 export async function verifyOtp(
   otp: string,
   referenceNo: string
@@ -119,10 +152,6 @@ export async function verifyOtp(
   });
 }
 
-/**
- * Check if a mobile number currently has an active subscription.
- * Returns status === 'REGISTERED' for active subscribers.
- */
 export async function checkSubscription(
   mobile: string
 ): Promise<CheckSubscriptionResponse> {
@@ -131,9 +160,6 @@ export async function checkSubscription(
   });
 }
 
-/**
- * Unsubscribe a user from the service.
- */
 export async function unsubscribe(
   mobile: string
 ): Promise<UnsubscribeResponse> {
@@ -144,8 +170,6 @@ export async function unsubscribe(
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
-/** Returns true when a BDApps response indicates success / active subscription.
- *  BDApps is inconsistent across endpoints — cover all known variants. */
 export function isSuccess(res: { statusCode?: string; status?: string; message?: string }): boolean {
   const code = (res.statusCode ?? res.status ?? '').toUpperCase().trim();
   const msg  = (res.message ?? '').toUpperCase();

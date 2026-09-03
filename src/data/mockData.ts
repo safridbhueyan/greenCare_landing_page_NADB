@@ -100,7 +100,7 @@ export const PLANTS_LIBRARY: Plant[] = [
     water: 'Every 2-3 weeks',
     humidity: 'Low (30-40%)',
     petSafe: false,
-    image: '/snake-plant.jpg',
+    image: './snake-plant.jpg',
     description: 'Extremely resilient architectural succulent known for air purifying capabilities. Thrives on neglect and tolerates low lighting.',
     careTips: [
       'Allow soil to dry out completely between waterings',
@@ -140,7 +140,7 @@ export const PLANTS_LIBRARY: Plant[] = [
     water: 'Weekly (Dramatically droops when thirsty)',
     humidity: 'High (50-70%)',
     petSafe: false,
-    image: '/peace-lily.jpg',
+    image: './peace-lily.jpg',
     description: 'Elegant shade-loving indoor favorite producing white floral spathes. Excellent natural communicator that tells you when it needs water.',
     careTips: [
       'Use filtered room-temperature water to prevent leaf tip burn',
@@ -211,7 +211,7 @@ export const DOCTORS: Doctor[] = [
     experienceYears: 12,
     rating: 4.98,
     reviewsCount: 342,
-    avatar: '/doctor-tasneem.jpg',
+    avatar: './doctor-tasneem.jpg',
     status: 'Available',
     bio: 'বাংলাদেশ কৃষি বিশ্ববিদ্যালয়ের সাবেক সিনিয়র গবেষক। ধান, পাট ও শাকসবজির ছত্রাকজনিত রোগ নির্ণয় ও জৈব জীবাণুনাশক ব্যবহারে বিশেষজ্ঞ।',
     consultationFee: '৳ ৩০০ / সেশন'
@@ -224,7 +224,7 @@ export const DOCTORS: Doctor[] = [
     experienceYears: 15,
     rating: 4.95,
     reviewsCount: 218,
-    avatar: '/doctor-mahbub.jpg',
+    avatar: './doctor-mahbub.jpg',
     status: 'Available',
     bio: 'বাংলাদেশ ধান গবেষণা ইনস্টিটিউটে ১৫ বছরের অভিজ্ঞতাসম্পন্ন কৃষিবিদ। মাটির N-P-K ভারসাম্য, জৈব সার ও মাইকোরাইজাল ইনোকুলেশনে দক্ষ পরামর্শক।',
     consultationFee: '৳ ৩৫০ / সেশন'
@@ -237,7 +237,7 @@ export const DOCTORS: Doctor[] = [
     experienceYears: 9,
     rating: 4.99,
     reviewsCount: 512,
-    avatar: '/doctor-sanjida.jpg',
+    avatar: './doctor-sanjida.jpg',
     status: 'Available',
     bio: 'ঢাকার শহুরে ছাদ বাগান ও বারান্দা গার্ডেনিংয়ে বিশেষজ্ঞ। দেশীয় ও বিদেশি বিরল উদ্ভিদের পরিচর্যা, পোকামাকড় দমন ও মাইক্রোক্লাইমেট তৈরিতে অভিজ্ঞ।',
     consultationFee: '৳ ২৫০ / সেশন'
@@ -275,7 +275,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
   {
     id: 'post-3',
     author: 'Maya Patel',
-    authorAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=150',
+    authorAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800',
     plantType: 'Pothos Propagation',
     timeAgo: '1 day ago',
     title: '🌱 3 golden rules I learned propagating in glass jars indoors',

@@ -18,7 +18,6 @@ import {
   Apple,
   Play,
   PhoneOff,
-  Wifi,
 } from 'lucide-react';
 import {
   sendOtp,
@@ -27,6 +26,7 @@ import {
   checkSubscription,
   normalizeMobile,
   isSuccess,
+  triggerAppDownload,
 } from '../services/bdapps.service';
 import type { SubscriptionState } from '../types';
 
@@ -52,6 +52,7 @@ function clearSubscription() {
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface SubscriptionSectionProps {
   onSubscriptionChange?: (state: SubscriptionState) => void;
+  pendingDownload?: boolean;
 }
 
 type Operator = 'robi' | 'cirkle';
@@ -88,6 +89,7 @@ const INFO_ITEMS = [
 // ─── Component ───────────────────────────────────────────────────────────────
 export const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
   onSubscriptionChange,
+  pendingDownload: _pendingDownload,
 }) => {
   const [operator, setOperator] = useState<Operator>('robi');
   const [phone, setPhone] = useState('');
@@ -229,6 +231,11 @@ export const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
           colors: ['#132E1E', '#2D6A4F', '#A3B18A', '#3A7D44'],
         });
       } catch {/* ignore */}
+
+      // Automatically trigger APK download upon successful subscription
+      setTimeout(() => {
+        triggerAppDownload();
+      }, 500);
     };
 
     try {
@@ -622,26 +629,28 @@ export const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-[#A3B18A]/70">Download GreenCare App</p>
                   <div className="grid grid-cols-2 gap-3">
-                    <a
-                      href="#download"
-                      className="p-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-white transition-all flex items-center justify-center gap-2"
+                    <button
+                      type="button"
+                      onClick={triggerAppDownload}
+                      className="p-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Apple className="w-5 h-5" />
                       <div className="text-left">
                         <div className="text-[9px] uppercase tracking-wider opacity-60">Download on</div>
                         <div className="text-xs font-bold leading-none">App Store</div>
                       </div>
-                    </a>
-                    <a
-                      href="#download"
-                      className="p-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-white transition-all flex items-center justify-center gap-2"
+                    </button>
+                    <button
+                      type="button"
+                      onClick={triggerAppDownload}
+                      className="p-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Play className="w-5 h-5 fill-white" />
                       <div className="text-left">
                         <div className="text-[9px] uppercase tracking-wider opacity-60">GET IT ON</div>
                         <div className="text-xs font-bold leading-none">Google Play</div>
                       </div>
-                    </a>
+                    </button>
                   </div>
                 </div>
 

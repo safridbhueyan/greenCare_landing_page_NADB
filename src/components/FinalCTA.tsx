@@ -3,9 +3,10 @@ import { ArrowRight, Download, Sparkles } from 'lucide-react';
 
 interface FinalCTAProps {
   onOpenSubscription: () => void;
+  onOpenDownload?: () => void;
 }
 
-export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenSubscription }) => {
+export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenSubscription, onOpenDownload }) => {
   return (
     <section className="relative py-28 bg-[#132E1E] text-white overflow-hidden">
       {/* Background Macro Foliage Photography */}
@@ -35,7 +36,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenSubscription }) => {
 
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
-            onClick={onOpenSubscription}
+            onClick={onOpenDownload || onOpenSubscription}
             className="px-8 py-4 rounded-full bg-[#FAF8F5] text-[#132E1E] font-bold text-base hover:bg-white transition-all duration-300 flex items-center justify-center gap-3 shadow-xl hover:scale-105"
           >
             <span>Start with GreenCare</span>
@@ -43,7 +44,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenSubscription }) => {
           </button>
 
           <button
-            onClick={onOpenSubscription}
+            onClick={onOpenDownload || onOpenSubscription}
             className="px-8 py-4 rounded-full border border-white/30 text-white font-semibold text-base hover:bg-white/10 transition-all flex items-center justify-center gap-2"
           >
             <Download className="w-4 h-4 text-[#A3B18A]" />

@@ -20,6 +20,7 @@ import settings from '../assets/Screenshot_1788427743.png';
 
 interface AppSectionProps {
   onOpenSubscription: () => void;
+  onOpenDownload?: () => void;
 }
 
 const screens = [
@@ -65,7 +66,7 @@ const screens = [
   },
 ];
 
-export const AppSection: React.FC<AppSectionProps> = ({ onOpenSubscription }) => {
+export const AppSection: React.FC<AppSectionProps> = ({ onOpenSubscription, onOpenDownload }) => {
   const [active, setActive] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
@@ -373,7 +374,7 @@ export const AppSection: React.FC<AppSectionProps> = ({ onOpenSubscription }) =>
 
           <div style={{ width: '1px', height: '56px', background: 'rgba(255,255,255,0.08)', margin: '0 6px' }} />
 
-          <button onClick={onOpenSubscription} style={{
+          <button onClick={onOpenDownload || onOpenSubscription} style={{
             display: 'flex', alignItems: 'center', gap: '10px',
             padding: '14px 28px', borderRadius: '999px', border: 'none',
             background: 'linear-gradient(135deg, #2D6A4F, #52B788)',
