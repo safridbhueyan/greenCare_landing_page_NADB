@@ -31,9 +31,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
         <div className="flex items-center justify-between">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-[#132E1E] flex items-center justify-center text-[#A3B18A] transition-transform duration-300 group-hover:scale-105 shadow-xs">
-              <Sprout className="w-5 h-5" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="GreenCare Logo"
+              className="w-10 h-10 rounded-xl object-contain transition-transform duration-300 group-hover:scale-105 shadow-xs"
+            />
             <div className="flex flex-col">
               <span className="font-bold text-xl tracking-tight text-[#132E1E] font-sans">
                 GreenCare<span className="text-[#3A7D44]">.</span>

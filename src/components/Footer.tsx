@@ -11,9 +11,11 @@ export const Footer: React.FC = () => {
           {/* Logo & Info */}
           <div className="md:col-span-4 space-y-4">
             <a href="#" className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-[#132E1E] flex items-center justify-center text-[#A3B18A]">
-                <Sprout className="w-5 h-5" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="GreenCare Logo"
+                className="w-10 h-10 rounded-xl object-contain shadow-xs"
+              />
               <span className="font-bold text-xl tracking-tight text-[#132E1E]">
                 GreenCare<span className="text-[#3A7D44]">.</span>
               </span>
@@ -41,7 +43,7 @@ export const Footer: React.FC = () => {
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#52796F]">Navigation</h4>
             <ul className="space-y-2 text-xs font-medium text-[#132E1E]/80">
               <li><a href="#" className="hover:text-[#2D6A4F] transition-colors">Home</a></li>
-              <li><a href="#disease-detection" className="hover:text-[#2D6A4F] transition-colors">Disease Detection</a></li>
+              <li><a href="#why-greencare" className="hover:text-[#2D6A4F] transition-colors">Why GreenCare</a></li>
               <li><a href="#ai-assistant" className="hover:text-[#2D6A4F] transition-colors">AI Assistant</a></li>
               <li><a href="#plant-doctors" className="hover:text-[#2D6A4F] transition-colors">Plant Doctors</a></li>
               <li><a href="#plant-library" className="hover:text-[#2D6A4F] transition-colors">Plant Library</a></li>
