@@ -36,14 +36,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
               alt="GreenCare Logo"
               className="w-10 h-10 rounded-xl object-contain transition-transform duration-300 group-hover:scale-105 shadow-xs"
             />
-            <div className="flex flex-col">
-              <span className="font-bold text-xl tracking-tight text-[#132E1E] font-sans">
-                GreenCare<span className="text-[#3A7D44]">.</span>
-              </span>
-              <span className="text-[10px] tracking-widest text-[#52796F] uppercase font-semibold -mt-1">
-                Digital Garden
-              </span>
-            </div>
+            <span className="font-bold text-xl tracking-tight text-[#132E1E] font-sans">
+              GreenCare<span className="text-[#3A7D44]">.</span>
+            </span>
           </a>
 
           {/* Desktop Navigation */}
@@ -72,12 +67,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
             >
               Community
             </a>
-            <a
-              href="#subscription"
-              className="text-sm font-medium text-[#2D6A4F] hover:text-[#132E1E] transition-colors font-semibold"
-            >
-              Subscribe
-            </a>
           </nav>
 
           {/* Action Buttons */}
@@ -92,22 +81,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
                 🌱 Premium Active
               </button>
             ) : (
-              <>
-                <button
-                  onClick={onOpenSubscription}
-                  className="px-5 py-2.5 rounded-full text-sm font-medium text-[#132E1E] hover:bg-[#132E1E]/5 transition-colors border border-[#132E1E]/15"
-                >
-                  Explore Features
-                </button>
-                <button
-                  id="navbar-get-premium-btn"
-                  onClick={onOpenSubscription}
-                  className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#132E1E] text-[#FAF8F5] hover:bg-[#2D6A4F] transition-all duration-300 flex items-center gap-2 shadow-xs hover:shadow-md hover:-translate-y-0.5"
-                >
-                  <Sparkles className="w-4 h-4 text-[#A3B18A]" />
-                  Get Premium Access
-                </button>
-              </>
+              <button
+                id="navbar-get-premium-btn"
+                onClick={onOpenSubscription}
+                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#132E1E] text-[#FAF8F5] hover:bg-[#2D6A4F] transition-all duration-300 flex items-center gap-2 shadow-xs hover:shadow-md hover:-translate-y-0.5"
+              >
+                <Sparkles className="w-4 h-4 text-[#A3B18A]" />
+                Get Premium Access
+              </button>
             )}
           </div>
 
@@ -152,13 +133,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
             className="block text-base font-medium text-[#132E1E] py-2 border-b border-[#132E1E]/5"
           >
             Community
-          </a>
-          <a
-            href="#subscription"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-base font-semibold text-[#2D6A4F] py-2 border-b border-[#132E1E]/5"
-          >
-            Subscribe
           </a>
 
           <div className="pt-2 flex flex-col gap-3">
