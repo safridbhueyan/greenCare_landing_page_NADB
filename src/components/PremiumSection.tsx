@@ -73,9 +73,22 @@ export const PremiumSection: React.FC<PremiumSectionProps> = ({ onOpenSubscripti
 
             <div className="flex items-center justify-center gap-2 text-xs text-[#132E1E]/60 font-medium">
               <ShieldCheck className="w-4 h-4 text-[#2D6A4F]" />
-              <span>Simple 30-second mobile phone OTP verification • No credit card required</span>
+              <span>Simple 30-second OTP verification · No credit card required</span>
+            </div>
+
+            {/* Operator eligibility */}
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              <span className="text-[11px] text-[#132E1E]/50 font-medium">📡 Available for:</span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-700">
+                Robi
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-700">
+                cirkle
+              </span>
+              <span className="text-[11px] text-[#132E1E]/40">SIM users in Bangladesh</span>
             </div>
           </div>
+
 
         </div>
 

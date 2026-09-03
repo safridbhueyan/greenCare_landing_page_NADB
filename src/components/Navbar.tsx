@@ -3,9 +3,11 @@ import { Sprout, Menu, X, ChevronRight, Sparkles } from 'lucide-react';
 
 interface NavbarProps {
   onOpenSubscription: () => void;
+  /** True when the user has an active BDApps subscription */
+  isSubscribed?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -78,19 +80,33 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription }) => {
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={onOpenSubscription}
-              className="px-5 py-2.5 rounded-full text-sm font-medium text-[#132E1E] hover:bg-[#132E1E]/5 transition-colors border border-[#132E1E]/15"
-            >
-              Explore Features
-            </button>
-            <button
-              onClick={onOpenSubscription}
-              className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#132E1E] text-[#FAF8F5] hover:bg-[#2D6A4F] transition-all duration-300 flex items-center gap-2 shadow-xs hover:shadow-md hover:-translate-y-0.5"
-            >
-              <Sparkles className="w-4 h-4 text-[#A3B18A]" />
-              Get Premium Access
-            </button>
+            {isSubscribed ? (
+              <button
+                id="navbar-manage-sub-btn"
+                onClick={onOpenSubscription}
+                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#3A7D44]/15 text-[#2D6A4F] hover:bg-[#3A7D44]/25 transition-all border border-[#3A7D44]/30 flex items-center gap-2"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#3A7D44] animate-pulse" />
+                🌱 Premium Active
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={onOpenSubscription}
+                  className="px-5 py-2.5 rounded-full text-sm font-medium text-[#132E1E] hover:bg-[#132E1E]/5 transition-colors border border-[#132E1E]/15"
+                >
+                  Explore Features
+                </button>
+                <button
+                  id="navbar-get-premium-btn"
+                  onClick={onOpenSubscription}
+                  className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#132E1E] text-[#FAF8F5] hover:bg-[#2D6A4F] transition-all duration-300 flex items-center gap-2 shadow-xs hover:shadow-md hover:-translate-y-0.5"
+                >
+                  <Sparkles className="w-4 h-4 text-[#A3B18A]" />
+                  Get Premium Access
+                </button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -144,16 +160,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription }) => {
           </a>
 
           <div className="pt-2 flex flex-col gap-3">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenSubscription();
-              }}
-              className="w-full py-3 rounded-xl bg-[#132E1E] text-[#FAF8F5] font-semibold text-center flex items-center justify-center gap-2 shadow-xs"
-            >
-              <span>Get Premium Access</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            {isSubscribed ? (
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenSubscription(); }}
+                className="w-full py-3 rounded-xl bg-[#3A7D44]/15 border border-[#3A7D44]/30 text-[#2D6A4F] font-semibold text-center flex items-center justify-center gap-2"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#3A7D44] animate-pulse" />
+                <span>🌱 Premium Active — Manage</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenSubscription(); }}
+                className="w-full py-3 rounded-xl bg-[#132E1E] text-[#FAF8F5] font-semibold text-center flex items-center justify-center gap-2 shadow-xs"
+              >
+                <span>Get Premium Access</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       )}

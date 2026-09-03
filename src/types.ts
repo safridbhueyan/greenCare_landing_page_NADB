@@ -67,3 +67,10 @@ export interface ChatMessage {
   category?: string;
   actionPills?: string[];
 }
+
+/** Persisted subscription state (stored in localStorage under 'gc_sub') */
+export interface SubscriptionState {
+  isSubscribed: boolean;
+  /** Normalized mobile number (8801XXXXXXXXX) */
+  mobile: string | null;
+}
