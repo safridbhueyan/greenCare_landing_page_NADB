@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { HowItWorks } from './components/HowItWorks';
-import { DiseaseClinic } from './components/DiseaseClinic';
 import { AIAssistant } from './components/AIAssistant';
 import { PlantDoctors } from './components/PlantDoctors';
 import { PlantLibrary } from './components/PlantLibrary';
@@ -69,7 +68,6 @@ export function App() {
       <main className="flex-1">
         <Hero onOpenSubscription={scrollToSubscription} />
         <HowItWorks />
-        <DiseaseClinic onOpenSubscription={scrollToSubscription} />
         <AIAssistant onOpenSubscription={scrollToSubscription} />
         <PlantDoctors onOpenSubscription={scrollToSubscription} />
         <PlantLibrary onOpenSubscription={scrollToSubscription} />

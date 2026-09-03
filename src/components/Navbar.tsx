@@ -47,12 +47,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <a
-              href="#disease-detection"
-              className="text-sm font-medium text-[#132E1E]/80 hover:text-[#132E1E] transition-colors"
-            >
-              Disease Clinic
-            </a>
-            <a
               href="#ai-assistant"
               className="text-sm font-medium text-[#132E1E]/80 hover:text-[#132E1E] transition-colors"
             >
@@ -129,13 +123,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#FAF8F5] border-b border-[#132E1E]/10 px-4 pt-4 pb-6 mt-2 space-y-4 shadow-lg animate-in slide-in-from-top-2 duration-200">
-          <a
-            href="#disease-detection"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-base font-medium text-[#132E1E] py-2 border-b border-[#132E1E]/5"
-          >
-            Disease Clinic
-          </a>
           <a
             href="#ai-assistant"
             onClick={() => setMobileMenuOpen(false)}

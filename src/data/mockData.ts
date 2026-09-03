@@ -100,7 +100,7 @@ export const PLANTS_LIBRARY: Plant[] = [
     water: 'Every 2-3 weeks',
     humidity: 'Low (30-40%)',
     petSafe: false,
-    image: 'https://images.unsplash.com/photo-1593482892290-f54927ae1bf6?auto=format&fit=crop&q=80&w=800',
+    image: '/snake-plant.jpg',
     description: 'Extremely resilient architectural succulent known for air purifying capabilities. Thrives on neglect and tolerates low lighting.',
     careTips: [
       'Allow soil to dry out completely between waterings',
@@ -140,7 +140,7 @@ export const PLANTS_LIBRARY: Plant[] = [
     water: 'Weekly (Dramatically droops when thirsty)',
     humidity: 'High (50-70%)',
     petSafe: false,
-    image: 'https://images.unsplash.com/photo-1593691509543-c55fb32e7355?auto=format&fit=crop&q=80&w=800',
+    image: '/peace-lily.jpg',
     description: 'Elegant shade-loving indoor favorite producing white floral spathes. Excellent natural communicator that tells you when it needs water.',
     careTips: [
       'Use filtered room-temperature water to prevent leaf tip burn',
@@ -204,45 +204,46 @@ export const PLANTS_LIBRARY: Plant[] = [
 
 export const DOCTORS: Doctor[] = [
   {
-    id: 'dr-sarah',
-    name: 'Dr. Sarah Green',
-    title: 'Ph.D. Plant Pathology',
-    specialty: 'Fungal Diseases & Root Pathogens',
+    id: 'dr-tasneem',
+    name: 'ড. তাসনীম আহমেদ',
+    title: 'Ph.D. উদ্ভিদ রোগবিজ্ঞান',
+    specialty: 'ছত্রাকজনিত রোগ ও মূলের সংক্রমণ',
     experienceYears: 12,
     rating: 4.98,
     reviewsCount: 342,
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400',
+    avatar: '/doctor-tasneem.jpg',
     status: 'Available',
-    bio: 'Former senior researcher at Royal Botanical Gardens with specialized focus on indoor tropical foliage diagnostics and organic biocontrol solutions.',
-    consultationFee: '$25 / session'
+    bio: 'বাংলাদেশ কৃষি বিশ্ববিদ্যালয়ের সাবেক সিনিয়র গবেষক। ধান, পাট ও শাকসবজির ছত্রাকজনিত রোগ নির্ণয় ও জৈব জীবাণুনাশক ব্যবহারে বিশেষজ্ঞ।',
+    consultationFee: '৳ ৩০০ / সেশন'
   },
   {
-    id: 'dr-marcus',
-    name: 'Dr. Marcus Thorne',
-    title: 'M.Sc. Agronomy & Soil Science',
-    specialty: 'Soil Microbiome & Fertilizer Nutrition',
+    id: 'dr-mahbub',
+    name: 'ড. মাহবুব হোসেন',
+    title: 'M.Sc. কৃষিবিজ্ঞান ও মৃত্তিকা বিজ্ঞান',
+    specialty: 'মাটির অণুজীব ও সার ব্যবস্থাপনা',
     experienceYears: 15,
     rating: 4.95,
     reviewsCount: 218,
-    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400',
+    avatar: '/doctor-mahbub.jpg',
     status: 'Available',
-    bio: 'Passionate horticultural scientist advising home growers on custom soil formulation, N-P-K mineral balances, and mycorrhizal root inoculation.',
-    consultationFee: '$30 / session'
+    bio: 'বাংলাদেশ ধান গবেষণা ইনস্টিটিউটে ১৫ বছরের অভিজ্ঞতাসম্পন্ন কৃষিবিদ। মাটির N-P-K ভারসাম্য, জৈব সার ও মাইকোরাইজাল ইনোকুলেশনে দক্ষ পরামর্শক।',
+    consultationFee: '৳ ৩৫০ / সেশন'
   },
   {
-    id: 'elena-rostova',
-    name: 'Elena Rostova',
-    title: 'Master Botanical Consultant',
-    specialty: 'Rare Aroids & Urban Jungle Setup',
+    id: 'sanjida-islam',
+    name: 'সানজিদা ইসলাম',
+    title: 'মাস্টার বোটানিক্যাল কনসালট্যান্ট',
+    specialty: 'বিরল উদ্ভিদ ও শহুরে বাগান পরিকল্পনা',
     experienceYears: 9,
     rating: 4.99,
     reviewsCount: 512,
-    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400',
+    avatar: '/doctor-sanjida.jpg',
     status: 'Available',
-    bio: 'Specialist in rare Monstera mint, variegated Philodendrons, cabinet greenhouse microclimates, and indoor pest eradication.',
-    consultationFee: '$20 / session'
+    bio: 'ঢাকার শহুরে ছাদ বাগান ও বারান্দা গার্ডেনিংয়ে বিশেষজ্ঞ। দেশীয় ও বিদেশি বিরল উদ্ভিদের পরিচর্যা, পোকামাকড় দমন ও মাইক্রোক্লাইমেট তৈরিতে অভিজ্ঞ।',
+    consultationFee: '৳ ২৫০ / সেশন'
   }
 ];
+
 
 export const COMMUNITY_POSTS: CommunityPost[] = [
   {
