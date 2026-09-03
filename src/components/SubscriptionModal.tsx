@@ -54,6 +54,12 @@ interface SubscriptionModalProps {
 // ─── Component ─────────────────────────────────────────────────────────────
 
 type Step = 'phone' | 'otp' | 'success' | 'unsubscribe' | 'unsubscribed';
+type Operator = 'robi' | 'cirkle';
+
+const OPERATOR_CFG: Record<Operator, { label: string; prefix: string; placeholder: string }> = {
+  robi:   { label: 'Robi',   prefix: '018', placeholder: '018XXXXXXXX' },
+  cirkle: { label: 'cirkle', prefix: '016', placeholder: '016XXXXXXXX' },
+};
 
 export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
   isOpen,
@@ -61,6 +67,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
   onSubscriptionChange,
 }) => {
   const [step, setStep] = useState<Step>('phone');
+  const [operator, setOperator] = useState<Operator>('robi');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [referenceNo, setReferenceNo] = useState('');
@@ -81,6 +88,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
         setOtp(['', '', '', '', '', '']);
         setReferenceNo('');
         setErrorMsg('');
+        setOperator('robi');
       }
     }
   }, [isOpen]);
@@ -115,6 +123,21 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
     const digits = phone.replace(/\D/g, '');
     if (digits.length < 10) {
       setErrorMsg('Please enter a valid Bangladeshi mobile number.');
+      return;
+    }
+
+    // Validate SIM prefix matches selected operator
+    // Normalise: +88018... → 88018... → '0'+slice(3) = 018...
+    const expectedPrefix = OPERATOR_CFG[operator].prefix;
+    const localDigits = digits.startsWith('880')
+      ? '0' + digits.slice(3)
+      : digits.startsWith('0')
+      ? digits
+      : '0' + digits;
+    if (!localDigits.startsWith(expectedPrefix)) {
+      setErrorMsg(
+        `${OPERATOR_CFG[operator].label} numbers must start with ${expectedPrefix} or +880${expectedPrefix.slice(1)}.`
+      );
       return;
     }
 
@@ -269,15 +292,40 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               </p>
             </div>
 
-            {/* Operator eligibility badge */}
-            <div className="flex items-center justify-center gap-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-red-700">
-                <Wifi className="w-3 h-3" /> Robi
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-bold text-purple-700">
-                <Wifi className="w-3 h-3" /> cirkle
-              </span>
-              <span className="text-[10px] text-[#132E1E]/40 font-medium">SIM users only</span>
+            {/* Operator selector */}
+            <div className="space-y-2">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#52796F] text-center">Select SIM Operator</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  id="modal-op-robi"
+                  type="button"
+                  onClick={() => { setOperator('robi'); setPhone(''); setErrorMsg(''); }}
+                  className={`py-3 px-4 rounded-xl border-2 text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150 ${
+                    operator === 'robi'
+                      ? 'border-red-500 bg-red-50 text-red-700 shadow-sm'
+                      : 'border-[#132E1E]/15 bg-white text-[#132E1E]/60 hover:border-red-300'
+                  }`}
+                >
+                  <Wifi className="w-4 h-4" /> Robi
+                  {operator === 'robi' && <Check className="w-3.5 h-3.5 ml-auto" />}
+                </button>
+                <button
+                  id="modal-op-cirkle"
+                  type="button"
+                  onClick={() => { setOperator('cirkle'); setPhone(''); setErrorMsg(''); }}
+                  className={`py-3 px-4 rounded-xl border-2 text-sm font-bold flex items-center justify-center gap-2 transition-all duration-150 ${
+                    operator === 'cirkle'
+                      ? 'border-purple-500 bg-purple-50 text-purple-700 shadow-sm'
+                      : 'border-[#132E1E]/15 bg-white text-[#132E1E]/60 hover:border-purple-300'
+                  }`}
+                >
+                  <Wifi className="w-4 h-4" /> cirkle
+                  {operator === 'cirkle' && <Check className="w-3.5 h-3.5 ml-auto" />}
+                </button>
+              </div>
+              <p className="text-[10px] text-[#132E1E]/40 text-center">
+                {operator === 'robi' ? 'Robi numbers start with 018' : 'cirkle numbers start with 016'}
+              </p>
             </div>
 
             <form onSubmit={handlePhoneSubmit} className="space-y-4">
@@ -295,7 +343,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     type="tel"
                     required
                     inputMode="numeric"
-                    placeholder="1XXXXXXXXX"
+                    placeholder={OPERATOR_CFG[operator].placeholder}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="flex-1 px-4 py-3.5 rounded-xl bg-white border border-[#132E1E]/15 text-sm font-semibold text-[#132E1E] focus:outline-none focus:border-[#2D6A4F] placeholder-[#132E1E]/30"

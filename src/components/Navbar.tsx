@@ -76,6 +76,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
             >
               Community
             </a>
+            <a
+              href="#subscription"
+              className="text-sm font-medium text-[#2D6A4F] hover:text-[#132E1E] transition-colors font-semibold"
+            >
+              Subscribe
+            </a>
           </nav>
 
           {/* Action Buttons */}
@@ -157,6 +163,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubscription, isSubscribed
             className="block text-base font-medium text-[#132E1E] py-2 border-b border-[#132E1E]/5"
           >
             Community
+          </a>
+          <a
+            href="#subscription"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-base font-semibold text-[#2D6A4F] py-2 border-b border-[#132E1E]/5"
+          >
+            Subscribe
           </a>
 
           <div className="pt-2 flex flex-col gap-3">

@@ -10,17 +10,20 @@ import { PlantCommunity } from './components/PlantCommunity';
 import { WhyGreenCare } from './components/WhyGreenCare';
 import { AppSection } from './components/AppSection';
 import { PremiumSection } from './components/PremiumSection';
+import { SubscriptionSection, loadSubscription } from './components/SubscriptionSection';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
-import { SubscriptionModal, loadSubscription } from './components/SubscriptionModal';
 import { checkSubscription, isSuccess } from './services/bdapps.service';
 import type { SubscriptionState } from './types';
 
 const STORAGE_KEY = 'gc_sub';
 
-export function App() {
-  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
+/** Smooth-scroll to the inline subscription section */
+function scrollToSubscription() {
+  document.getElementById('subscription')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
+export function App() {
   // Seed state from localStorage immediately (no flash)
   const [subscription, setSubscription] = useState<SubscriptionState>(loadSubscription);
 
@@ -33,63 +36,56 @@ export function App() {
    */
   useEffect(() => {
     const saved = loadSubscription();
-    if (!saved.isSubscribed || !saved.mobile) return; // nothing to verify
+    if (!saved.isSubscribed || !saved.mobile) return;
 
     checkSubscription(saved.mobile)
       .then((res) => {
         const active = isSuccess(res) || res.status?.toUpperCase() === 'REGISTERED';
         if (!active) {
-          // Subscription no longer valid — clear local state
           localStorage.removeItem(STORAGE_KEY);
           setSubscription({ isSubscribed: false, mobile: null });
           console.info('[GreenCare] Subscription expired or not found on BDApps. Cleared local state.');
         }
-        // If still active, no change needed — state is already correct
       })
       .catch(() => {
-        // Network error or API unreachable — keep local state as-is (don't punish offline users)
         console.warn('[GreenCare] Could not verify subscription (network). Keeping cached state.');
       });
-  }, []); // runs once on mount
+  }, []);
 
   const handleSubscriptionChange = (state: SubscriptionState) => {
     setSubscription(state);
   };
 
-
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#132E1E] flex flex-col font-sans selection:bg-[#A3B18A]/30 selection:text-[#132E1E]">
 
-      {/* Sticky Header Navbar */}
+      {/* Sticky Header Navbar — all Subscribe buttons scroll to inline section */}
       <Navbar
-        onOpenSubscription={() => setIsSubscriptionOpen(true)}
+        onOpenSubscription={scrollToSubscription}
         isSubscribed={subscription.isSubscribed}
       />
 
       {/* Main Digital Garden Page Structure */}
       <main className="flex-1">
-        <Hero onOpenSubscription={() => setIsSubscriptionOpen(true)} />
+        <Hero onOpenSubscription={scrollToSubscription} />
         <HowItWorks />
-        <DiseaseClinic onOpenSubscription={() => setIsSubscriptionOpen(true)} />
-        <AIAssistant onOpenSubscription={() => setIsSubscriptionOpen(true)} />
-        <PlantDoctors onOpenSubscription={() => setIsSubscriptionOpen(true)} />
-        <PlantLibrary onOpenSubscription={() => setIsSubscriptionOpen(true)} />
-        <PlantCommunity onOpenSubscription={() => setIsSubscriptionOpen(true)} />
+        <DiseaseClinic onOpenSubscription={scrollToSubscription} />
+        <AIAssistant onOpenSubscription={scrollToSubscription} />
+        <PlantDoctors onOpenSubscription={scrollToSubscription} />
+        <PlantLibrary onOpenSubscription={scrollToSubscription} />
+        <PlantCommunity onOpenSubscription={scrollToSubscription} />
         <WhyGreenCare />
-        <AppSection onOpenSubscription={() => setIsSubscriptionOpen(true)} />
-        <PremiumSection onOpenSubscription={() => setIsSubscriptionOpen(true)} />
-        <FinalCTA onOpenSubscription={() => setIsSubscriptionOpen(true)} />
+        <AppSection onOpenSubscription={scrollToSubscription} />
+        <PremiumSection onOpenSubscription={scrollToSubscription} />
+
+        {/* Inline subscription section — full OTP flow, no modal */}
+        <SubscriptionSection onSubscriptionChange={handleSubscriptionChange} />
+
+        <FinalCTA onOpenSubscription={scrollToSubscription} />
       </main>
 
       {/* Minimal Footer */}
       <Footer />
-
-      {/* BDApps OTP Subscription Modal (Robi / cirkle SIM users) */}
-      <SubscriptionModal
-        isOpen={isSubscriptionOpen}
-        onClose={() => setIsSubscriptionOpen(false)}
-        onSubscriptionChange={handleSubscriptionChange}
-      />
 
     </div>
   );

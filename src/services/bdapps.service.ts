@@ -11,13 +11,28 @@
 
 const BASE = '/bdapps';
 
-/** Normalize any BD mobile format to 8801XXXXXXXXX */
+/** Normalize any BD mobile format → 13-digit international: 8801XXXXXXXXX
+ *
+ *  Accepted inputs (Robi 018 / cirkle 016):
+ *    01812345678          → 8801812345678   (local 11-digit)
+ *    +8801812345678       → 8801812345678   (full international with +)
+ *    8801812345678        → 8801812345678   (already normalized)
+ *    1812345678           → 8801812345678   (no trunk 0)
+ */
 export function normalizeMobile(raw: string): string {
-  const digits = raw.replace(/\D/g, '');
-  if (digits.startsWith('8801') && digits.length === 13) return digits;
-  if (digits.startsWith('01') && digits.length === 11) return '880' + digits;
-  if (digits.startsWith('1') && digits.length === 10) return '8801' + digits;
-  return digits; // pass through and let server validate
+  const digits = raw.replace(/\D/g, ''); // strip +, spaces, dashes, etc.
+
+  // Already 13-digit international format
+  if (digits.startsWith('880') && digits.length === 13) return digits;
+
+  // Local 11-digit with trunk 0: 01XXXXXXXXX → 8801XXXXXXXXX
+  if (digits.startsWith('01') && digits.length === 11) return '880' + digits.slice(1);
+
+  // 10-digit without trunk 0: 1XXXXXXXXX → 8801XXXXXXXXX
+  if (digits.startsWith('1') && digits.length === 10) return '880' + digits;
+
+  // Fallback: prepend 880 if not already present so API never gets a bare number
+  return digits.startsWith('880') ? digits : '880' + digits;
 }
 
 /** Encode a plain object as application/x-www-form-urlencoded */
@@ -129,14 +144,27 @@ export async function unsubscribe(
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
-/** Returns true when a BDApps response indicates success. */
-export function isSuccess(res: { statusCode?: string; status?: string }): boolean {
-  const code = (res.statusCode ?? res.status ?? '').toUpperCase();
-  // BDApps uses 'S' or '0' or 'SUCCESS' or 'REGISTERED' depending on endpoint
-  return (
-    code === 'S' ||
-    code === '0' ||
-    code === 'SUCCESS' ||
-    code === 'REGISTERED'
-  );
+/** Returns true when a BDApps response indicates success / active subscription.
+ *  BDApps is inconsistent across endpoints — cover all known variants. */
+export function isSuccess(res: { statusCode?: string; status?: string; message?: string }): boolean {
+  const code = (res.statusCode ?? res.status ?? '').toUpperCase().trim();
+  const msg  = (res.message ?? '').toUpperCase();
+
+  const SUCCESS_CODES = new Set([
+    'S',
+    '0',
+    'SUCCESS',
+    'REGISTERED',
+    'ALREADY_SUBSCRIBED',
+    'SUBSCRIPTION_ALREADY_EXIST',
+    'ALREADY_REGISTERED',
+    'ACTIVE',
+    'OK',
+  ]);
+
+  if (SUCCESS_CODES.has(code)) return true;
+  if (/^S\d+$/.test(code)) return true;
+  if (!code && (msg.includes('SUCCESS') || msg.includes('SUBSCRIBED') || msg.includes('REGISTERED'))) return true;
+
+  return false;
 }
